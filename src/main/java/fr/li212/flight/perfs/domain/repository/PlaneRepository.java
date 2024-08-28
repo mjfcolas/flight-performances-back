@@ -2,6 +2,7 @@ package fr.li212.flight.perfs.domain.repository;
 
 import fr.li212.flight.perfs.domain.model.CreatePlaneCommand;
 import fr.li212.flight.perfs.domain.model.Plane;
+import fr.li212.flight.perfs.domain.model.SearchCommand;
 import fr.li212.flight.perfs.domain.model.UpdatePlaneCommand;
 
 import java.util.Collection;
@@ -23,4 +24,6 @@ public interface PlaneRepository {
     void removeFavoritePlaneForUser(String planeId, String userId);
 
     Optional<Plane> findById(String id);
+
+    List<Plane> search(final SearchCommand searchQuery, final int limit);
 }

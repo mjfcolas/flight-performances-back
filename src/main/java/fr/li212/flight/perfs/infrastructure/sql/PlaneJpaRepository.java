@@ -2,11 +2,13 @@ package fr.li212.flight.perfs.infrastructure.sql;
 
 import fr.li212.flight.perfs.domain.model.CreatePlaneCommand;
 import fr.li212.flight.perfs.domain.model.Plane;
+import fr.li212.flight.perfs.domain.model.SearchCommand;
 import fr.li212.flight.perfs.domain.model.UpdatePlaneCommand;
 import fr.li212.flight.perfs.domain.repository.PlaneRepository;
 import fr.li212.flight.perfs.infrastructure.sql.db_entities.FavoriteDbEntity;
 import fr.li212.flight.perfs.infrastructure.sql.db_entities.PlaneDbEntity;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Collection;
 import java.util.List;
@@ -64,5 +66,14 @@ public class PlaneJpaRepository implements PlaneRepository {
     @Transactional
     public void removeFavoritePlaneForUser(final String planeId, final String userId) {
         this.favoriteDbEntityRepository.deleteByPlaneIdAndUserId(Long.parseLong(planeId), userId);
+    }
+
+    @Override
+    public List<Plane> search(final SearchCommand searchCommand, final int limit) {
+        return this.planeDbEntityRepository
+                .search(searchCommand.registration(), searchCommand.name(), searchCommand.ownerName(), PageRequest.of(0, limit))
+                .stream()
+                .map(PlaneDbEntity::toDomain)
+                .toList();
     }
 }

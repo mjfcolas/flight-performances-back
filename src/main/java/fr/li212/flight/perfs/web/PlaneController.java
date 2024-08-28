@@ -2,13 +2,13 @@ package fr.li212.flight.perfs.web;
 
 import fr.li212.flight.perfs.domain.model.CreatePlaneCommand;
 import fr.li212.flight.perfs.domain.model.Plane;
+import fr.li212.flight.perfs.domain.model.SearchCommand;
 import fr.li212.flight.perfs.domain.model.UpdatePlaneCommand;
 import fr.li212.flight.perfs.domain.repository.PlaneRepository;
 import fr.li212.flight.perfs.web.model.CreatePlaneCommandDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/planes")
@@ -21,8 +21,18 @@ public class PlaneController {
     }
 
     @GetMapping
-    public Collection<Plane> search(@RequestParam("query") final String query) {
-        return Collections.emptyList();
+    public Collection<Plane> search(
+            @RequestParam(value = "registration", required = false) final String registration,
+            @RequestParam(value = "name", required = false) final String name,
+            @RequestParam(value = "ownerName", required = false) final String ownerName) {
+
+        final SearchCommand query = new SearchCommand(
+                registration == null ? "" : registration,
+                name == null ? "" : name,
+                ownerName == null ? "" : ownerName
+        );
+
+        return this.planeRepository.search(query, 50);
     }
 
     @GetMapping("/{id}")
