@@ -1,0 +1,15 @@
+meta {
+  name: Create Favorite
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/users/current/favorite-planes/1
+  body: text
+  auth: none
+}
+
+body:text {
+  1
+}

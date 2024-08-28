@@ -1,0 +1,11 @@
+meta {
+  name: Delete Favorite
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{base_url}}/users/current/favorite-planes/1
+  body: text
+  auth: none
+}

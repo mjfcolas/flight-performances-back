@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${FLIGHT_PERFS_DATASOURCE_URL}/${FLIGHT_PERFS_DATASOURCE_DATABASE}
+    username: ${FLIGHT_PERFS_DATASOURCE_USERNAME}
+    password: ${FLIGHT_PERFS_DATASOURCE_PASSWORD}
+
+allowed-origins: ${FLIGHT_PERFS_ALLOWED_ORIGINS}

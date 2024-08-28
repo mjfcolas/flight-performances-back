@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+	  https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+
+    <changeSet id="1-start" author="mjfcolas">
+        <tagDatabase tag="1-start"/>
+    </changeSet>
+
+    <changeSet id="create_application_user_table" author="mjfcolas">
+        <createTable tableName="application_user" schemaName="public">
+            <column name="id" type="text">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="application_user_pk"/>
+            </column>
+            <column name="displayed_name" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <sql>DROP TABLE public.application_user</sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_plane_table_and_sequence" author="mjfcolas">
+        <createSequence schemaName="public" sequenceName="plane_id_seq"/>
+        <createTable tableName="plane" schemaName="public">
+            <column name="id"
+                    type="bigint"
+                    defaultValueComputed="nextval('public.plane_id_seq')">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="plane_pk"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="registration" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="performances" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE public.plane;
+                DROP SEQUENCE plane_id_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_favorite_table_and_sequence" author="mjfcolas">
+        <createSequence schemaName="public" sequenceName="favorite_id_seq"/>
+        <createTable tableName="favorite" schemaName="public">
+            <column name="id"
+                    type="bigint"
+                    defaultValueComputed="nextval('public.favorite_id_seq')">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="favorite_pk"/>
+            </column>
+            <column name="application_user_id" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="plane_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE public.favorite;
+                DROP SEQUENCE favorite_id_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_foreign_keys" author="mjfcolas">
+        <addForeignKeyConstraint
+                constraintName="plane_owner_id_fk"
+                baseTableSchemaName="public"
+                baseTableName="plane" baseColumnNames="owner_id"
+                referencedTableSchemaName="public"
+                referencedTableName="application_user" referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint
+                constraintName="favorite_application_user_id_fk"
+                baseTableSchemaName="public"
+                baseTableName="favorite" baseColumnNames="application_user_id"
+                referencedTableSchemaName="public"
+                referencedTableName="application_user" referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint
+                constraintName="favorite_plane_id_fk"
+                baseTableSchemaName="public"
+                baseTableName="favorite" baseColumnNames="plane_id"
+                referencedTableSchemaName="public"
+                referencedTableName="plane" referencedColumnNames="id"
+        />
+        <rollback>
+            <sql>
+                ALTER TABLE plane DROP CONSTRAINT plane_owner_id_fk;
+                ALTER TABLE favorite DROP CONSTRAINT favorite_application_user_id_fk;
+                ALTER TABLE favorite DROP CONSTRAINT favorite_plane_id_fk;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1-end" author="mjfcolas">
+        <tagDatabase tag="1-end"/>
+    </changeSet>
+
+</databaseChangeLog>
