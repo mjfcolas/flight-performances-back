@@ -4,5 +4,10 @@ spring:
     url: jdbc:postgresql://${FLIGHT_PERFS_DATASOURCE_URL}/${FLIGHT_PERFS_DATASOURCE_DATABASE}
     username: ${FLIGHT_PERFS_DATASOURCE_USERNAME}
     password: ${FLIGHT_PERFS_DATASOURCE_PASSWORD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${FLIGHT_PERFS_OAUTH_ISSUER_URI}
 
 allowed-origins: ${FLIGHT_PERFS_ALLOWED_ORIGINS}

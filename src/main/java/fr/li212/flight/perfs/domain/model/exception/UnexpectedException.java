@@ -1,4 +1,4 @@
-package fr.li212.flight.perfs.domain.model;
+package fr.li212.flight.perfs.domain.model.exception;
 
 public class UnexpectedException extends RuntimeException{
 

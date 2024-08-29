@@ -2,6 +2,7 @@ package fr.li212.flight.perfs.web;
 
 import fr.li212.flight.perfs.domain.model.Plane;
 import fr.li212.flight.perfs.domain.repository.PlaneRepository;
+import fr.li212.flight.perfs.security.AuthenticatedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +12,6 @@ import java.util.Collection;
 @RequestMapping("/users/current")
 public class UserController {
 
-    public final static String CURRENT_USER_ID = "1";
-
     private final PlaneRepository planeRepository;
 
     @Autowired
@@ -21,22 +20,22 @@ public class UserController {
     }
 
     @GetMapping("/created-planes")
-    public Collection<Plane> getPlanes() {
-        return planeRepository.forUser(CURRENT_USER_ID);
+    public Collection<Plane> getPlanes(final AuthenticatedEntity authenticatedEntity) {
+        return planeRepository.forUser(authenticatedEntity.getPrincipal());
     }
 
     @GetMapping("/favorite-planes")
-    public Collection<Plane> getFavoritePlanes() {
-        return planeRepository.favoritesForUser(CURRENT_USER_ID);
+    public Collection<Plane> getFavoritePlanes(final AuthenticatedEntity authenticatedEntity) {
+        return planeRepository.favoritesForUser(authenticatedEntity.getPrincipal());
     }
 
     @PutMapping("/favorite-planes/{planeId}")
-    public void putFavoritePlane(@PathVariable("planeId") final String planeId) {
-        planeRepository.addFavoritePlaneForUser(planeId, CURRENT_USER_ID);
+    public void putFavoritePlane(@PathVariable("planeId") final String planeId, final AuthenticatedEntity authenticatedEntity) {
+        planeRepository.addFavoritePlaneForUser(planeId, authenticatedEntity.getPrincipal());
     }
 
     @DeleteMapping("/favorite-planes/{planeId}")
-    public void deleteFavoritePlane(@PathVariable("planeId") final String planeId) {
-        planeRepository.removeFavoritePlaneForUser(planeId, CURRENT_USER_ID);
+    public void deleteFavoritePlane(@PathVariable("planeId") final String planeId, final AuthenticatedEntity authenticatedEntity) {
+        planeRepository.removeFavoritePlaneForUser(planeId, authenticatedEntity.getPrincipal());
     }
 }

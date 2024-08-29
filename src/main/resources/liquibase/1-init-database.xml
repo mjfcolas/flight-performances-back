@@ -12,14 +12,15 @@
     <changeSet id="create_application_user_table" author="mjfcolas">
         <createTable tableName="application_user" schemaName="public">
             <column name="id" type="text">
-                <constraints nullable="false"
-                             primaryKey="true"
-                             primaryKeyName="application_user_pk"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="application_user_pk"/>
             </column>
-            <column name="displayed_name" type="text">
-                <constraints nullable="false"/>
+            <column name="nickname" type="text">
+                <constraints unique="true"/>
             </column>
         </createTable>
+        <createIndex indexName="application_user_nickname_idx" tableName="application_user">
+            <column name="nickname"/>
+        </createIndex>
         <rollback>
             <sql>DROP TABLE public.application_user</sql>
         </rollback>

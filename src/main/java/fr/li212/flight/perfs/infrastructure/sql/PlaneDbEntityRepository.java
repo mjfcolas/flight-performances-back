@@ -17,12 +17,12 @@ public interface PlaneDbEntityRepository extends CrudRepository<PlaneDbEntity, L
             SELECT p FROM PlaneDbEntity p
             WHERE (:registration = '' OR p.registration LIKE :registration)
             AND (:name = '' OR p.name LIKE %:name%)
-            AND (:ownerName = '' OR p.owner.displayedName LIKE %:ownerName%)
+            AND (:ownerNickname = '' OR p.owner.nickname LIKE %:ownerNickname%)
             """)
     List<PlaneDbEntity> search(
             @Param("registration") final String registration,
             @Param("name") final String name,
-            @Param("ownerName") final String ownerName,
+            @Param("ownerNickname") final String ownerNickname,
             Pageable pageable
     );
 }

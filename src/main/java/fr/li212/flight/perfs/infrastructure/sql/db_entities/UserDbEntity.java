@@ -12,12 +12,13 @@ import lombok.NoArgsConstructor;
 public class UserDbEntity {
 
     @Id
+    @Basic
     @Column(name = "id")
     private String id;
 
     @Basic
-    @Column(name = "displayed_name")
-    private String displayedName;
+    @Column(name = "nickname")
+    private String nickname;
 
     public static UserDbEntity fromId(final String userId) {
         return new UserDbEntity(
@@ -29,11 +30,11 @@ public class UserDbEntity {
     public static UserDbEntity fromDomain(final User user) {
         return new UserDbEntity(
                 user.id(),
-                user.displayedName()
+                user.nickname()
         );
     }
 
     public User toDomain() {
-        return new User(id, displayedName);
+        return new User(id, nickname);
     }
 }

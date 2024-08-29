@@ -5,6 +5,7 @@ import fr.li212.flight.perfs.domain.model.Plane;
 import fr.li212.flight.perfs.domain.model.SearchCommand;
 import fr.li212.flight.perfs.domain.model.UpdatePlaneCommand;
 import fr.li212.flight.perfs.domain.repository.PlaneRepository;
+import fr.li212.flight.perfs.security.AuthenticatedEntity;
 import fr.li212.flight.perfs.web.model.CreatePlaneCommandDto;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,15 +42,15 @@ public class PlaneController {
     }
 
     @PutMapping(consumes = "application/json")
-    public Plane put(@RequestBody final CreatePlaneCommandDto createPlaneCommand) {
-        final CreatePlaneCommand command = createPlaneCommand.toCreateCommandForUser(UserController.CURRENT_USER_ID);
+    public Plane create(@RequestBody final CreatePlaneCommandDto createPlaneCommand, AuthenticatedEntity authenticatedEntity) {
+        final CreatePlaneCommand command = createPlaneCommand.toCreateCommandForUser(authenticatedEntity.getPrincipal());
 
         return this.planeRepository.create(command);
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")
-    public Plane patch(@PathVariable("id") final String planeId, @RequestBody final CreatePlaneCommandDto createPlaneCommand) {
+    public Plane update(@PathVariable("id") final String planeId, @RequestBody final CreatePlaneCommandDto createPlaneCommand, AuthenticatedEntity authenticatedEntity) {
         final UpdatePlaneCommand command = createPlaneCommand.toUpdateCommandForId(planeId);
-        return this.planeRepository.update(command);
+        return this.planeRepository.update(command, authenticatedEntity.getPrincipal());
     }
 }

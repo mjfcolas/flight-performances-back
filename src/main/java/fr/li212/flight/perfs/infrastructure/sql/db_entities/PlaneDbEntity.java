@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.li212.flight.perfs.domain.model.CreatePlaneCommand;
 import fr.li212.flight.perfs.domain.model.Plane;
-import fr.li212.flight.perfs.domain.model.UnexpectedException;
+import fr.li212.flight.perfs.domain.model.exception.UnexpectedException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
