@@ -1,10 +1,7 @@
 package fr.li212.flight.perfs.infrastructure.sql.db_entities;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.li212.flight.perfs.domain.model.CreatePlaneCommand;
 import fr.li212.flight.perfs.domain.model.Plane;
-import fr.li212.flight.perfs.domain.model.exception.UnexpectedException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -43,7 +40,7 @@ public class PlaneDbEntity {
                 null,
                 command.name(),
                 command.registration(),
-                command.performances().toString(),
+                command.performances(),
                 UserDbEntity.fromId(command.ownerId())
         );
     }
@@ -53,24 +50,20 @@ public class PlaneDbEntity {
                 Long.parseLong(plane.id()),
                 plane.name(),
                 plane.registration(),
-                plane.performances().toString(),
+                plane.performances(),
                 UserDbEntity.fromDomain(plane.owner())
         );
     }
 
     public Plane toDomain() {
-        ObjectMapper mapper = new ObjectMapper();
+        return new Plane(
+                this.id.toString(),
+                this.name,
+                this.registration,
+                this.performances,
+                this.owner.toDomain()
+        );
 
-        try {
-            return new Plane(
-                    this.id.toString(),
-                    this.name,
-                    this.registration,
-                    mapper.readTree(this.performances),
-                    this.owner.toDomain()
-            );
-        } catch (JsonProcessingException e) {
-            throw new UnexpectedException(e);
-        }
     }
+
 }
