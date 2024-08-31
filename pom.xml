@@ -14,7 +14,7 @@
     <name>flight-perfs-back</name>
 
     <properties>
-        <revision>0.0.1</revision>
+        <revision>test-tag-4</revision>
         <java.version>21</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
