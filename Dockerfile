@@ -8,7 +8,7 @@ ENV APPLICATION_HOME /opt/flight-performances
 # workdir switch
 WORKDIR "${APPLICATION_HOME}"
 
-RUN addgroup user
+RUN groupadd user
 RUN useradd -g user user
 
 # copy files
