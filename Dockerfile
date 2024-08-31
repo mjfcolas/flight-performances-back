@@ -12,7 +12,7 @@ RUN groupadd user
 RUN useradd -g user user
 
 # copy files
-COPY "application/target/${JAR_FILE}" "${APPLICATION_HOME}"
+COPY "target/${JAR_FILE}" "${APPLICATION_HOME}"
 
 ENV JAR_PATH="${APPLICATION_HOME}/${JAR_FILE}"
 
