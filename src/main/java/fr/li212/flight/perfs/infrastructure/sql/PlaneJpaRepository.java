@@ -1,14 +1,11 @@
 package fr.li212.flight.perfs.infrastructure.sql;
 
-import fr.li212.flight.perfs.domain.model.CreatePlaneCommand;
-import fr.li212.flight.perfs.domain.model.Plane;
-import fr.li212.flight.perfs.domain.model.SearchCommand;
-import fr.li212.flight.perfs.domain.model.UpdatePlaneCommand;
+import fr.li212.flight.perfs.domain.model.*;
 import fr.li212.flight.perfs.domain.model.exception.NotFoundException;
 import fr.li212.flight.perfs.domain.repository.PlaneRepository;
+import fr.li212.flight.perfs.domain.repository.UserRepository;
 import fr.li212.flight.perfs.infrastructure.sql.db_entities.FavoriteDbEntity;
 import fr.li212.flight.perfs.infrastructure.sql.db_entities.PlaneDbEntity;
-import fr.li212.flight.perfs.infrastructure.sql.db_entities.UserDbEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 
@@ -20,16 +17,16 @@ public class PlaneJpaRepository implements PlaneRepository {
 
     private final PlaneDbEntityRepository planeDbEntityRepository;
     private final FavoriteDbEntityRepository favoriteDbEntityRepository;
-    private final UserDbEntityRepository userDbEntityRepository;
+    private final UserRepository userRepository;
 
     public PlaneJpaRepository(
             final PlaneDbEntityRepository planeDbEntityRepository,
             final FavoriteDbEntityRepository favoriteDbEntityRepository,
-            final UserDbEntityRepository userDbEntityRepository
+            final UserRepository userRepository
     ) {
         this.planeDbEntityRepository = planeDbEntityRepository;
         this.favoriteDbEntityRepository = favoriteDbEntityRepository;
-        this.userDbEntityRepository = userDbEntityRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -56,8 +53,8 @@ public class PlaneJpaRepository implements PlaneRepository {
     @Transactional
     public Plane create(final CreatePlaneCommand command) {
 
-        this.userDbEntityRepository.findById(command.ownerId())
-                .orElseGet(() -> this.userDbEntityRepository.save(UserDbEntity.fromId(command.ownerId())));
+        this.userRepository.findById(command.ownerId())
+                .orElseGet(() -> this.userRepository.save(User.fromId(command.ownerId())));
         return this.planeDbEntityRepository.save(PlaneDbEntity.fromCreateCommand(command)).toDomain();
     }
 
@@ -73,8 +70,8 @@ public class PlaneJpaRepository implements PlaneRepository {
     @Override
     @Transactional
     public void addFavoritePlaneForUser(final String planeId, final String userId) {
-        this.userDbEntityRepository.findById(userId)
-                .orElseGet(() -> this.userDbEntityRepository.save(UserDbEntity.fromId(userId)));
+        this.userRepository.findById(userId)
+                .orElseGet(() -> this.userRepository.save(User.fromId(userId)));
         this.favoriteDbEntityRepository.save(FavoriteDbEntity.fromDomain(planeId, userId));
     }
 

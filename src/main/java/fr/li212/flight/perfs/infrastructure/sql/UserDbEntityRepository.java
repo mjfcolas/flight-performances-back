@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDbEntityRepository extends CrudRepository<UserDbEntity, String> {
+
+    boolean existsByNickname(final String nickname);
 }

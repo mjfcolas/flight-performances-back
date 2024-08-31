@@ -4,7 +4,6 @@ import fr.li212.flight.perfs.domain.model.CreatePlaneCommand;
 import fr.li212.flight.perfs.domain.model.Plane;
 import fr.li212.flight.perfs.domain.model.SearchCommand;
 import fr.li212.flight.perfs.domain.model.UpdatePlaneCommand;
-import fr.li212.flight.perfs.security.AuthenticatedEntity;
 
 import java.util.Collection;
 import java.util.List;

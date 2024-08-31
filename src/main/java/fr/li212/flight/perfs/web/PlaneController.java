@@ -4,9 +4,11 @@ import fr.li212.flight.perfs.domain.model.CreatePlaneCommand;
 import fr.li212.flight.perfs.domain.model.Plane;
 import fr.li212.flight.perfs.domain.model.SearchCommand;
 import fr.li212.flight.perfs.domain.model.UpdatePlaneCommand;
+import fr.li212.flight.perfs.domain.model.exception.NotFoundException;
 import fr.li212.flight.perfs.domain.repository.PlaneRepository;
 import fr.li212.flight.perfs.security.AuthenticatedEntity;
 import fr.li212.flight.perfs.web.model.CreatePlaneCommandDto;
+import fr.li212.flight.perfs.web.model.NotFoundWebException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -38,7 +40,7 @@ public class PlaneController {
 
     @GetMapping("/{id}")
     public Plane get(@PathVariable("id") final String id) {
-        return this.planeRepository.findById(id).orElseThrow();
+        return this.planeRepository.findById(id).orElseThrow(NotFoundWebException::new);
     }
 
     @PutMapping(consumes = "application/json")
@@ -50,7 +52,11 @@ public class PlaneController {
 
     @PutMapping(value = "/{id}", consumes = "application/json")
     public Plane update(@PathVariable("id") final String planeId, @RequestBody final CreatePlaneCommandDto createPlaneCommand, AuthenticatedEntity authenticatedEntity) {
-        final UpdatePlaneCommand command = createPlaneCommand.toUpdateCommandForId(planeId);
-        return this.planeRepository.update(command, authenticatedEntity.getPrincipal());
+        try {
+            final UpdatePlaneCommand command = createPlaneCommand.toUpdateCommandForId(planeId);
+            return this.planeRepository.update(command, authenticatedEntity.getPrincipal());
+        } catch (NotFoundException e) {
+            throw new NotFoundWebException();
+        }
     }
 }
