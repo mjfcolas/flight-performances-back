@@ -23,6 +23,25 @@
         <spring-boot.version>3.3.3</spring-boot.version>
     </properties>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>fr.li212.flight.perfs.application.Application</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencyManagement>
         <dependencies>
             <!-- BOMs -->
@@ -66,7 +85,5 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
-    <build>
-    </build>
 
 </project>

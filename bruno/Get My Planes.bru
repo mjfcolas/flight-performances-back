@@ -7,5 +7,9 @@ meta {
 get {
   url: {{base_url}}/users/current/created-planes
   body: none
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
