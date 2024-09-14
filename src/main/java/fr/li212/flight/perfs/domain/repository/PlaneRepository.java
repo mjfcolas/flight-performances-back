@@ -23,7 +23,9 @@ public interface PlaneRepository {
 
     void removeFavoritePlaneForUser(String planeId, String userId);
 
-    Optional<Plane> findById(String id);
+    Optional<Plane> find(String id);
+
+    void delete(String id, final String authenticatedUserId);
 
     List<Plane> search(final SearchCommand searchQuery, final int limit);
 }

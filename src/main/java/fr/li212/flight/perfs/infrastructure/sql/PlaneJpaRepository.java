@@ -37,8 +37,19 @@ public class PlaneJpaRepository implements PlaneRepository {
     }
 
     @Override
-    public Optional<Plane> findById(final String id) {
+    public Optional<Plane> find(final String id) {
         return planeDbEntityRepository.findById(Long.parseLong(id)).map(PlaneDbEntity::toDomain);
+    }
+
+    @Override
+    @Transactional
+    public void delete(final String id, final String authenticatedUserId) {
+        final Plane toDelete = this.find(id).orElseThrow(NotFoundException::new);
+        if (!toDelete.owner().id().equals(authenticatedUserId)) {
+            throw new NotFoundException();
+        }
+        favoriteDbEntityRepository.deleteByPlaneId(Long.parseLong(id));
+        planeDbEntityRepository.deleteById(Long.parseLong(id));
     }
 
     @Override
@@ -60,12 +71,13 @@ public class PlaneJpaRepository implements PlaneRepository {
 
     @Override
     public Plane update(final UpdatePlaneCommand command, final String authenticatedUserId) {
-        final Plane toUpdate = this.findById(command.id()).orElseThrow(NotFoundException::new);
+        final Plane toUpdate = this.find(command.id()).orElseThrow(NotFoundException::new);
         if (!toUpdate.owner().id().equals(authenticatedUserId)) {
             throw new NotFoundException();
         }
         return this.planeDbEntityRepository.save(PlaneDbEntity.fromDomain(command.updatePlane(toUpdate))).toDomain();
     }
+
 
     @Override
     @Transactional

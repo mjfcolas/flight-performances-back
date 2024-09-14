@@ -40,7 +40,16 @@ public class PlaneController {
 
     @GetMapping("/{id}")
     public Plane get(@PathVariable("id") final String id) {
-        return this.planeRepository.findById(id).orElseThrow(NotFoundWebException::new);
+        return this.planeRepository.find(id).orElseThrow(NotFoundWebException::new);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") final String id, AuthenticatedEntity authenticatedEntity) {
+        try {
+            this.planeRepository.delete(id, authenticatedEntity.getPrincipal());
+        } catch (NotFoundException e) {
+            throw new NotFoundWebException();
+        }
     }
 
     @PutMapping(consumes = "application/json")

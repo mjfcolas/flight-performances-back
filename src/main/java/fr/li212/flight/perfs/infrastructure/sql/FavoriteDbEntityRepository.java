@@ -12,4 +12,6 @@ public interface FavoriteDbEntityRepository extends CrudRepository<FavoriteDbEnt
     List<FavoriteDbEntity> findAllByUserId(final String userId);
 
     void deleteByPlaneIdAndUserId(Long planeId, String userId);
+
+    void deleteByPlaneId(Long planeId);
 }
